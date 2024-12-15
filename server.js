@@ -1,5 +1,5 @@
 import http from "http";
-import { addUser,checkIDUnique, dynamodb_client } from "./dynamodb_client.js";
+import { addUser, dynamodb_client } from "./dynamodb_client.js";
 import cors from 'cors'
 
 
@@ -37,9 +37,12 @@ app.post("/newuser", (req, res) => {
   console.log("new USER request for", username,password)
 
 
-  addUser(dynamodb_client,username,password);
-
-  res.status(201).json({ message: 'User created successfully!', username, password }); 
+  if( addUser(dynamodb_client,username,password) == false){
+    // add logic for failure to add new user
+  }
+  else{
+    res.status(201).json({ message: 'User created successfully!', username, }); 
+  }
 });
 
 app.listen(process.env.PORT, () => {

@@ -1,6 +1,7 @@
 // require('dotenv').config()
 import 'dotenv/config'
 import crypto from 'crypto'
+import hash from 'hash-it'
 
 console.log(process.env.DB_ACCESS_KEY)
 
@@ -25,14 +26,24 @@ export const dynamodb_client = new DynamoDBClient(config);
 
 
 export async function addUser(dynamodb_client,username,password) {
-    
+   /*  
     var user_id = crypto.randomInt(0, 10000000);
     while(true){
       user_id = crypto.randomInt(0, 10000000);
-      if (await checkIDUnique(dynamodb_client,user_id) == true){
+      if (await checkUnique(dynamodb_client,user_id,username) == true){
         break; 
       }
+    } */
+
+    var user_id = hash(username)
+
+    console.log('hashed', user_id)
+
+    if (await checkUnique(dynamodb_client,user_id) == false){
+      console.log("NOT UNIQUE USERNAME:" ,username)
+      return false;
     }
+    
 
     console.log("newID:" ,user_id, username,password)
 
@@ -63,7 +74,7 @@ export async function addUser(dynamodb_client,username,password) {
 }
 
 // function to check if he generated user id is unique in the data base
-export async function checkIDUnique(dynamodb_client,query_user_id) {
+export async function checkUnique(dynamodb_client,query_user_id) {
   const input = {
     "TableName": "users", // Replace with your DynamoDB table name
     "KeyConditionExpression": 'user_id = :partitionKey', // Replace 'id' with your partition key name
@@ -73,39 +84,30 @@ export async function checkIDUnique(dynamodb_client,query_user_id) {
         }
     }
   };
-  
+
+/*   const input2 = {
+    TableName: "users", // Replace with your DynamoDB table name
+    KeyConditionExpression: 'username = :Username', // Replace 'id' with your partition key name
+    ExpressionAttributeValues: {
+        ":Username":{
+          "S":username // Value to query by
+        }
+    }
+  }; */
+
+
   const command = new QueryCommand(input);
-  const response = await dynamodb_client.send(command);
+  const response  = await dynamodb_client.send(command);
 
-  console.log(response)
+  console.log("res",response)
 
-  if (!response.Items || response.Items.length === 0) {
-    return true;
+ /*  const command2 = new QueryCommand(input2);
+  const response2 = await dynamodb_client.send(command2);
+  console.log("res2", response2) */
+0
+  if (!response.Items || response.Items.length === 0 ) {
+    return true
   } 
-
   return false;
 }
 
-
-
-/*
-
-
-import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb"; // ES6 import
-// const { DynamoDBDocumentClient } = require("@aws-sdk/lib-dynamodb"); // CommonJS import
-
-// Bare-bones document client
-const ddbDocClient = DynamoDBDocumentClient.from(client); // client is DynamoDB client
-
-// add to table?
-await ddbDocClient.send(
-    new PutCommand({
-      users,
-      Item: {
-        user_id: "1",
-        content: "content from DynamoDBDocumentClient",
-      },
-    })
-  );
-
-*/

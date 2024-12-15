@@ -13,8 +13,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts --openssl-legacy-provider start ",  
-                          //--openssl-legacy-provider added because of "0308010c:digital envelope routines::unsupported" Error
+    "start": "react-scripts --openssl-legacy-provider start",  
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
