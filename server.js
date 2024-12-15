@@ -34,14 +34,12 @@ app.get("/api", (req, res) => {
 app.post("/newuser", (req, res) => {
   //console.log(req.body)
   const { username, password} = req.body;
-  res.status(201).json({ message: 'User created successfully!', username, password });
-  console.log("new USER request!")
+  console.log("new USER request for", username,password)
 
 
+  addUser(dynamodb_client,username,password);
 
-  //addUser(dynamodb_client,104,username,password);
-
-  res.status(201).json({ message: 'User created successfully!'})
+  res.status(201).json({ message: 'User created successfully!', username, password }); 
 });
 
 app.listen(process.env.PORT, () => {
@@ -50,10 +48,10 @@ app.listen(process.env.PORT, () => {
 
 
 
-console.log(await checkIDUnique(dynamodb_client,2342))
+/* console.log(await checkIDUnique(dynamodb_client,23401))
 
-if(await checkIDUnique(dynamodb_client,2342) == true){
+if(await checkIDUnique(dynamodb_client,23401) == true){
   console.log("GOOOB")
-}
+} */
 //checkIDUnique(dynamodb_client,2)
 

@@ -15,6 +15,7 @@ const config = {
   
 
 import { DynamoDBClient,PutItemCommand,QueryCommand,ScanCommand } from "@aws-sdk/client-dynamodb"; // ES6 import
+import { PutCommand } from '@aws-sdk/lib-dynamodb';
 
 // Bare-bones DynamoDB Client
 export const dynamodb_client = new DynamoDBClient(config);
@@ -23,29 +24,35 @@ export const dynamodb_client = new DynamoDBClient(config);
 
 
 
-export async function addUser(dynamodb_client,user_id,username,password) {
-
+export async function addUser(dynamodb_client,username,password) {
     
-    var n = crypto.randomInt(0, 1000000);
-    while(!checkIDUnique(dynamodb_client,n)){
-
+    var user_id = crypto.randomInt(0, 10000000);
+    while(true){
+      user_id = crypto.randomInt(0, 10000000);
+      if (await checkIDUnique(dynamodb_client,user_id) == true){
+        break; 
+      }
     }
 
+    console.log("newID:" ,user_id, username,password)
+
     const input = {
+        "TableName": "users",
         "Item": {
           "user_id": {
             "N": user_id.toString()
           },
           "password": {
-            "S": password.toString()
+            "S": password
           },
           "username": {
-            "S": username.toString()
+            "S": username
           }
         },
         "ReturnConsumedCapacity": "TOTAL",
-        "TableName": "users"
+
       };
+      console.log(input)
       const command = new PutItemCommand(input);
       const response = await dynamodb_client.send(command);
       
@@ -55,8 +62,9 @@ export async function addUser(dynamodb_client,user_id,username,password) {
     
 }
 
+// function to check if he generated user id is unique in the data base
 export async function checkIDUnique(dynamodb_client,query_user_id) {
-  const   input = {
+  const input = {
     "TableName": "users", // Replace with your DynamoDB table name
     "KeyConditionExpression": 'user_id = :partitionKey', // Replace 'id' with your partition key name
     "ExpressionAttributeValues": {
@@ -66,15 +74,12 @@ export async function checkIDUnique(dynamodb_client,query_user_id) {
     }
   };
   
-
   const command = new QueryCommand(input);
   const response = await dynamodb_client.send(command);
 
   console.log(response)
 
-
   if (!response.Items || response.Items.length === 0) {
-    console.log("EMPTY")
     return true;
   } 
 
