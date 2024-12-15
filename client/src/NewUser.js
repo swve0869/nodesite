@@ -6,23 +6,6 @@ import BASE_URL from './config.js';
 
 class NewUser extends Component {
 
-    // function addUser (formData){
-    //     const query = {
-    //         "username": formData.get("username"),
-    //         "password": formData.get("password")
-    //     };
-
-    //     fetch("/newuser")
-    //     alert(`trying to add '${query}'`);
-    // }
-
-    // return (
-    //     <form action={addUser}>
-    //         <p>Username: <input name="username" /></p>
-    //         <p>Password: <input name="password" /></p>
-    //         <button type="submit">Search</button>
-    //     </form>
-    //)
 
     constructor(props) {
         super(props);
@@ -38,6 +21,7 @@ class NewUser extends Component {
         let value = event.target.value;
         const name = target.name;
 
+        
         if (target.name === "password") {
             document.getElementById(name).type = "password";
             value = md5(event.target.value);
@@ -65,24 +49,25 @@ class NewUser extends Component {
         //console.log(JSON.stringify(jsonData))
 
         //console.log(`${BASE_URL}`)
-
+        
         fetch(`${BASE_URL}/newuser`, {  // Enter your IP address here
 
             method: 'POST', 
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json',  },
             body: JSON.stringify(jsonData) // body data type must match "Content-Type" header
           })
         .then((response) => {
-
-            console.log(response.body)
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
             return response.json();
+           //response.text()
+           /* console.log(response);
+           console.log(response.body.message) */
+           /*  if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            };
+            return response.json();    */
         })
-        .then((data) => console.log('Success:', data))
-        .catch((error) => console.error('Error:', error));
+       .then((text) => console.log('Success:', text))
+       .catch((error) => console.error('Error:', error));
         
     } 
 

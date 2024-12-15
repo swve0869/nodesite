@@ -1,5 +1,4 @@
 import React from "react";
-import logo from './logo.svg';
 import NewUser from "./NewUser";
 import './App.css';
 
@@ -11,23 +10,22 @@ import './App.css';
 function App() {
 
 
-  const [data, setData] = React.useState(null);
-
+ /*  const [data, setData] = React.useState(null);
   React.useEffect(() => {
+    console.log("HERE");
     fetch("/api")
       .then((res) => res.json())
       .then((data) => setData(data.message));
-  }, []);
+  }, []); */
 
 
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
+        
+        {/* <p>
           {!data }
-        </p>
-        {/* <p>{!data ? "Loading..." : data}</p> */}
+        </p> */}
 
         <NewUser></NewUser>
 

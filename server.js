@@ -7,10 +7,11 @@ import express from "express"
 const corsOptions = {
   origin: 'http://localhost:3000', // Replace with the URL you want to allow
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allow specific HTTP methods
-  allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers
+  allowedHeaders: ['*'], // Specify allowed headers
   preflightContinue: false, // Pass control to the next middleware if false
   optionsSuccessStatus: 204 // Some legacy browsers choke on 204
 };
+ 
 
 
 const app = express();
@@ -25,9 +26,10 @@ app.get("/api", (req, res) => {
 
 
 app.post("/newuser", (req, res) => {
-  console.log(req)
-  
-  const { username, password} = req.body;
+
+  res.status(201).json({ message: 'gooba!' });
+  //console.log(res)
+ /*  const { username, password} = req.body;
   console.log("new USER request for", username,password);
 
 
@@ -37,10 +39,7 @@ app.post("/newuser", (req, res) => {
      //console.log("ooga booga")
     if( await addUser(dynamodb_client,username,password) == false){
       // add logic for failure to add new user
-      console.log("NOT UNIQUE USERNAME:" ,username)
-  /*     res.status(201);
-      res.body = { "message": 'Username not unique', "servercode":'1'};
-      res.send()//console.log(res) */
+      console.log("NOT UNIQUE USERNAME:" ,username);
       res.status(201).json({ message: 'TESTET!' }); 
 
     }
@@ -49,9 +48,9 @@ app.post("/newuser", (req, res) => {
     }   
     
   
-  })(dynamodb_client,username,password)
+  })(dynamodb_client,username,password) */
 
-  res.status(200);
+
   
 });
 
