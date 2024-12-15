@@ -23,30 +23,14 @@ export const dynamodb_client = new DynamoDBClient(config);
 
 
 
-
-
 export async function addUser(dynamodb_client,username,password) {
-   /*  
-    var user_id = crypto.randomInt(0, 10000000);
-    while(true){
-      user_id = crypto.randomInt(0, 10000000);
-      if (await checkUnique(dynamodb_client,user_id,username) == true){
-        break; 
-      }
-    } */
 
     var user_id = hash(username)
 
-    console.log('hashed', user_id)
-
     if (await checkUnique(dynamodb_client,user_id) == false){
-      console.log("NOT UNIQUE USERNAME:" ,username)
       return false;
     }
     
-
-    console.log("newID:" ,user_id, username,password)
-
     const input = {
         "TableName": "users",
         "Item": {
@@ -63,7 +47,7 @@ export async function addUser(dynamodb_client,username,password) {
         "ReturnConsumedCapacity": "TOTAL",
 
       };
-      console.log(input)
+      //console.log(input)
       const command = new PutItemCommand(input);
       const response = await dynamodb_client.send(command);
       
@@ -99,7 +83,7 @@ export async function checkUnique(dynamodb_client,query_user_id) {
   const command = new QueryCommand(input);
   const response  = await dynamodb_client.send(command);
 
-  console.log("res",response)
+  // console.log("res",response)
 
  /*  const command2 = new QueryCommand(input2);
   const response2 = await dynamodb_client.send(command2);

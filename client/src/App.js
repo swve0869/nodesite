@@ -4,7 +4,7 @@ import NewUser from "./NewUser";
 import './App.css';
 
 
-import BASE_URL from './config.js';
+//import BASE_URL from './config.js';
 
 
 

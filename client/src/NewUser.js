@@ -60,9 +60,11 @@ class NewUser extends Component {
         var jsonData = {
             "username" : document.getElementById("username").value,
             "password" : document.getElementById("password").value
-            
+
         }
-        console.log(jsonData)
+        //console.log(JSON.stringify(jsonData))
+
+        //console.log(`${BASE_URL}`)
 
         fetch(`${BASE_URL}/newuser`, {  // Enter your IP address here
 
@@ -70,8 +72,10 @@ class NewUser extends Component {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(jsonData) // body data type must match "Content-Type" header
           })
-
         .then((response) => {
+
+            console.log(response.body)
+
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
