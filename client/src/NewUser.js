@@ -40,37 +40,43 @@ class NewUser extends Component {
 
     }
 
-    handleSubmit = () => {
-        var jsonData = {
-            "username" : document.getElementById("username").value,
-            "password" : document.getElementById("password").value
 
-        }
-        //console.log(JSON.stringify(jsonData))
-
-        //console.log(`${BASE_URL}`)
-        
-        fetch(`${BASE_URL}/newuser`, {  // Enter your IP address here
+    handleSubmit = async (event) => 
+        {  
+    
+        const url = `${BASE_URL}/newuser`
+                console.log(url)
+                var jsonData = {
+                "username" : document.getElementById("username").value,
+                "password" : document.getElementById("password").value}
+    
+                
+        await fetch(`${BASE_URL}/newuser`, {  // Enter your IP address here
 
             method: 'POST', 
             headers: { 'Content-Type': 'application/json',  },
             body: JSON.stringify(jsonData) // body data type must match "Content-Type" header
-          })
+        })
         .then((response) => {
-            return response.json();
-           //response.text()
-           /* console.log(response);
-           console.log(response.body.message) */
-           /*  if (!response.ok) {
+        
+            if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             };
-            return response.json();    */
+            return response.json();   
         })
-       .then((text) => console.log('Success:', text))
-       .catch((error) => console.error('Error:', error));
-        
-    } 
+        .then((data) => {console.log('Success:', data)
+            console.log(data.message)
+            if (data.errorcode == '0'){
+                console.log("nice! lets change the page")
+            }
+        })
+        .catch((error) => console.error('Error:', error)); 
 
+
+
+
+      
+        }
     render() {
     return (
         <div className="login">
