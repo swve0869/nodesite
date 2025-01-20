@@ -32,13 +32,11 @@ app.post("/newuser", async (req, res) => {
     console.log(username,password);
     
     const result =  await addUser(dynamodb_client,username,password); 
-    //res.status(200).json({ message: 'gooba!' });
-    if(result == false){
-      // add logic for failure to add new user
-      console.log("NOT UNIQUE USERNAME:" ,username);
-      return res.status(201).json({ message: 'Username not Unique', }); 
-    }
-    return res.status(200).json({ message: 'gooba!', errorcode: '0'});
+    if(result == false){    //if user already exists
+      console.log(username, " is not unique");
+      return res.status(201).json({ message: 'Username not Unique',errorcode: '1' }); 
+    }   // else user succesfully added exist
+    return res.status(200).json({ message: 'Succesfully added user ',errorcode: '0' });
 
   }catch (error) {
     console.log('Error in user creation:', error);
@@ -47,21 +45,6 @@ app.post("/newuser", async (req, res) => {
       message: error.message
     });
   }
- /*  async (res) => {
-    return res.status(200).json({ message: 'gooba!' });
-    const { username, password} = req.body;
-    const result =  await addUser(dynamodb_client,username,password); 
-    //res.status(200).json({ message: 'gooba!' });
-    if(result == false){
-      // add logic for failure to add new user
-      console.log("NOT UNIQUE USERNAME:" ,username);
-      return res.status(201).json({ message: 'Username not Unique', }); 
-    }
-    else{
-      console.log("use created succ")
-      return res.status(201).json({ message: 'User created successfully!',errorcode: '0'}); 
-    }   
-  } */
   
   //console.log(res)
 /*   const { username, password} = req.body;

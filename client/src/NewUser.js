@@ -7,7 +7,6 @@ import BASE_URL from './config.js';
 
 class NewUser extends Component {
 
-
     constructor(props) {
         super(props);
         this.state = {
@@ -46,12 +45,13 @@ class NewUser extends Component {
         {  
         event.preventDefault();
         const url = `${BASE_URL}/newuser`
-        /* var jsonData = {
-        "username" : document.getElementById("username").value,
-        "password" : document.getElementById("password").value} */
         var jsonData = {
+        "username" : document.getElementById("username").value,
+        "password" : document.getElementById("password").value}
+        // temp jsonData for testing
+        /* var jsonData = {
             "username" : "ABAB",
-            "password" : "HOGFGDF"}
+            "password" : "HOGFGDF"} */
         const fetchData = { 
             method: 'POST', 
             headers: { 'Content-Type': 'application/json',  },
@@ -59,15 +59,18 @@ class NewUser extends Component {
         }
 
         // api call with fetch        
-        await fetch(url, fetchData)
+        const data = await fetch(url, fetchData)
         .then((response) => response.json())
         .then((data) => {console.log('Success:', data)
             console.log(data.message)
             return data
         })
         .catch((error) => console.error('Got this ERror:', error)); 
- 
-
+        
+        
+        if (data.errorcode === '1'){
+            console.log("time to change site");
+        }
         //const webData = await axios.post(url, fetchData);
 
 
@@ -77,7 +80,7 @@ class NewUser extends Component {
     render() {
     return (
         <div className="login">
-        <h4>Create Account</h4>
+        <h4 className="create_account_text">Create Account</h4>
         <form onSubmit={this.handleSubmit}>
             <div className="text_area">
             <input
