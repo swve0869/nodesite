@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import "./NewUser.css";
 import md5 from 'md5';
+//import axios from 'axios'
 
 import BASE_URL from './config.js';
 
@@ -43,35 +44,31 @@ class NewUser extends Component {
 
     handleSubmit = async (event) => 
         {  
-    
+        event.preventDefault();
         const url = `${BASE_URL}/newuser`
-                console.log(url)
-                var jsonData = {
-                "username" : document.getElementById("username").value,
-                "password" : document.getElementById("password").value}
-    
-                
-        await fetch(`${BASE_URL}/newuser`, {  // Enter your IP address here
-
+        /* var jsonData = {
+        "username" : document.getElementById("username").value,
+        "password" : document.getElementById("password").value} */
+        var jsonData = {
+            "username" : "ABAB",
+            "password" : "HOGFGDF"}
+        const fetchData = { 
             method: 'POST', 
             headers: { 'Content-Type': 'application/json',  },
             body: JSON.stringify(jsonData) // body data type must match "Content-Type" header
-        })
-        .then((response) => {
-        
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            };
-            return response.json();   
-        })
+        }
+
+        // api call with fetch        
+        await fetch(url, fetchData)
+        .then((response) => response.json())
         .then((data) => {console.log('Success:', data)
             console.log(data.message)
-            if (data.errorcode == '0'){
-                console.log("nice! lets change the page")
-            }
+            return data
         })
-        .catch((error) => console.error('Error:', error)); 
+        .catch((error) => console.error('Got this ERror:', error)); 
+ 
 
+        //const webData = await axios.post(url, fetchData);
 
 
 
