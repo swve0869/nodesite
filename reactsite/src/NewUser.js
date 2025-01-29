@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 //import "./NewUser.css";
 import md5 from 'md5';
 import {useNavigate} from "react-router-dom";
@@ -7,55 +7,25 @@ import Homepage from './Homepage.js';
 
 import BASE_URL from './config.js';
 
-class NewUser extends Component {
-
-    //const navigate = useNavigate();
-
-    constructor(props) {
-        super(props);
-        this.state = {
-          username: 'enter username',
-          password: 'enter password',
-        }
-      }
-
-    //form handling before submission
-    handleInputChange = (event) => {
-        const target = event.target;
-        let value = event.target.value;
-        const name = target.name;
-
-        
-        if (target.name === "password") {
-            document.getElementById(name).type = "password";
-            value = md5(event.target.value);
-        }
-
-        this.setState({
-            [name]: value
-        });
-
-        document.getElementById(name).style.fontFamily = "Montserrat black";
-    }
-
-    setEmptyValue = (event) => {
-        const name = event.target.name
-        document.getElementById(name).value = "";
-
-    }
 
 
-    handleSubmit = async (event) => 
-        {  
-        event.preventDefault();
+const NewUser = ({handleLogin}) => {
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState('');
+    const navigate = useNavigate();
+
+    const handleSubmit = async(e) => {
+        e.preventDefault();
+        // Handle login logic here
+        console.log('Email:', username);
+        console.log('Password:', password);
+
         const url = `${BASE_URL}/newuser`
         var jsonData = {
-        "username" : document.getElementById("username").value,
-        "password" : document.getElementById("password").value}
-        // temp jsonData for testing
-        /* var jsonData = {
-            "username" : "ABAB",
-            "password" : "HOGFGDF"} */
+        "username" : username,
+        "password" : password}
+
         const fetchData = { 
             method: 'POST', 
             headers: { 'Content-Type': 'application/json',  },
@@ -77,62 +47,49 @@ class NewUser extends Component {
         }
         else{
             console.log("going to home page");
-           // navigate('/Homepage');
+            console.log("created new user")
+            handleLogin();
+            navigate('/Homepage');
             
         } 
+    };
 
 
-      
-        }
-    render() {
     return (
-        
-        <div className="login">
-
-{/* <Navigate to="/Homepage" /> */}
-
-
-        <h4 className="create_account_text">Create Account</h4>
-        <form onSubmit={this.handleSubmit}>
-            <div className="text_area">
-            <input
-                type="text"
-                id="username"
-                name="username"
-                defaultValue={this.state.username}
-                onChange={this.handleInputChange}
-                onFocus={this.setEmptyValue}
-                className="text_input"
-
-            />
-            </div>
-            <div className="text_area">
-            <input
-                type="text"
-                id="password"
-                name="password"
-                defaultValue={this.state.password}
-                onChange={this.handleInputChange}
-                onFocus={this.setEmptyValue}
-                className="text_input"
-
-            />
-            </div>
-            <input
-            type="submit"
-            value="Submit"
-            className="btn"
-
-            />
-        </form>
+        <div>
+            <h2>New User</h2>
+            <form >
+            <div>
+                <label>Username:</label>
+                    <input
+                        type="username"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        required
+                    />
+                </div>
+                <div>
+                    <label>Email:</label>
+                    <input
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                    />
+                </div>
+                <div>
+                    <label>Password:</label>
+                    <input
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                    />
+                </div>
+                <button type="submit" onClick={handleSubmit}>Create {username}{username ==="" ? '':'\'s '}Account</button>
+            </form>
         </div>
-    )
-}   
-}
+    );
+};
+
 export default NewUser;
-
-    
-     
-
-
-

@@ -45,30 +45,21 @@ app.post("/newuser", async (req, res) => {
       message: error.message
     });
   }
-  
-  //console.log(res)
-/*   const { username, password} = req.body;
-  console.log("new USER request for", username,password);
 
+});
 
-  (async (dynamodb_client,username,password) => {
-    //console.log("ooga booga")
-    const result = await addUser(dynamodb_client,username,password); 
-    console.log(result)  
-    if(result == false){
-      // add logic for failure to add new user
-      console.log("NOT UNIQUE USERNAME:" ,username);
-      return res.status(201).json({ message: 'TESTET!' }); 
-    }
-    else{
-      return res.status(201).json({ message: 'User created successfully!', }); 
-    }   
+app.post("/login", async (req, res) => {
+
+  try{
+    const { username, password} = req.body;
+    console.log("trying to login: ");
+    console.log(username,password);
     
-  
-  })(dynamodb_client,username,password) 
+    
 
- */
-  
+  }catch (error){
+
+  }
 });
 
 app.listen(process.env.PORT, () => {

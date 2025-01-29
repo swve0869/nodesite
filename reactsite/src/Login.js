@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import {useNavigate} from "react-router-dom";
 import BASE_URL from './config.js';
+import Box from './components/Box.js';
+import Alert from '@mui/material/Alert';
 
 
 
-const Login = ({change}) => {
+const Login = ({handleLogin}) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
@@ -12,10 +14,15 @@ const Login = ({change}) => {
     const handleSubmit = async(e) => {
         e.preventDefault();
         // Handle login logic here
+        if (!username || !password){
+            console.log("missing username or password")
+            
+        }
+
         console.log('Email:', username);
         console.log('Password:', password);
 
-        const url = `${BASE_URL}/newuser`
+        const url = `${BASE_URL}/login`
         var jsonData = {
         "username" : username,
         "password" : password}
@@ -41,21 +48,21 @@ const Login = ({change}) => {
         }
         else{
             console.log("going to home page");
-            change();
-           // navigate('/Homepage');
+            handleLogin();
+            navigate('/Homepage');
             
         } 
     };
 
 
     return (
-        <div>
+        <Box className="genericbox" width={"50%"} height={"50%"} >
             <h2>Login</h2>
             <form >
                 <div>
                     <label>Email:</label>
                     <input
-                        type="email"
+                        type="username"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
                         required
@@ -70,9 +77,10 @@ const Login = ({change}) => {
                         required
                     />
                 </div>
+                <Alert severity="error">This is an error alert — check it out!</Alert>
                 <button type="submit" onClick={handleSubmit}>Login</button>
             </form>
-        </div>
+        </Box>
     );
 };
 
