@@ -1,9 +1,12 @@
 import React from "react";
 import NewUser from "./NewUser";
 import './App.css';
-import { Route, Routes, Link } from 'react-router-dom';
+import { Route,Router, Routes, Link } from 'react-router-dom';
+import Homepage from './Homepage.js';   
+
 
 //import BASE_URL from './config.js';
+
 
 function App() {
   return (
@@ -12,10 +15,12 @@ function App() {
           <Link to="/NewUser" className="nav-item">New User?</Link>
         </nav>
 
-        <Routes>
-          <Route path="/NewUser" element={<NewUser/>}/>
-
-        </Routes>
+        
+          <Routes>
+            <Route path="/NewUser" element={<NewUser/>}/>
+            <Route path="/Homepage" element={<Homepage/>}/>
+          </Routes>
+       
         
  
         <a

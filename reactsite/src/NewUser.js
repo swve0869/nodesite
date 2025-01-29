@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
-import "./NewUser.css";
+//import "./NewUser.css";
 import md5 from 'md5';
+import {useNavigate} from "react-router-dom";
+import Homepage from './Homepage.js';   
 //import axios from 'axios'
 
 import BASE_URL from './config.js';
 
 class NewUser extends Component {
+
+    //const navigate = useNavigate();
 
     constructor(props) {
         super(props);
@@ -71,15 +75,23 @@ class NewUser extends Component {
         if (data.errorcode === '1'){
             console.log("time to change site");
         }
-        //const webData = await axios.post(url, fetchData);
-
+        else{
+            console.log("going to home page");
+           // navigate('/Homepage');
+            
+        } 
 
 
       
         }
     render() {
     return (
+        
         <div className="login">
+
+{/* <Navigate to="/Homepage" /> */}
+
+
         <h4 className="create_account_text">Create Account</h4>
         <form onSubmit={this.handleSubmit}>
             <div className="text_area">
