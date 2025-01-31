@@ -3,13 +3,13 @@ import {useNavigate} from "react-router-dom";
 import BASE_URL from './config.js';
 import Box from './components/Box.js';
 import Alert from '@mui/material/Alert';
+import Button from './components/Button.js';
 
 
 
 const Login = ({handleLogin}) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const navigate = useNavigate();
 
     const handleSubmit = async(e) => {
         e.preventDefault();
@@ -42,15 +42,12 @@ const Login = ({handleLogin}) => {
         })
         .catch((error) => console.error('Got this ERror:', error)); 
         
-        
+        // Check if login was successful
         if (data.errorcode === '1'){
-            console.log("time to change site");
+            console.log("login failed");
         }
         else{
-            console.log("going to home page");
-            handleLogin();
-            navigate('/Homepage');
-            
+            handleLogin(data.user_data);            
         } 
     };
 
@@ -78,7 +75,7 @@ const Login = ({handleLogin}) => {
                     />
                 </div>
                 <Alert severity="error">This is an error alert — check it out!</Alert>
-                <button type="submit" onClick={handleSubmit}>Login</button>
+                <button type="submit" onClick={handleSubmit} buttonmsg="Login">Login</button>
             </form>
         </Box>
     );

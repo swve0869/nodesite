@@ -27,7 +27,7 @@ export async function addUser(dynamodb_client,username,password,email) {
     
     var saltedpassword = hash(password+process.env.SALT);
     var user_id = hash(username+saltedpassword);
-    if (await checkUnique(dynamodb_client,user_id) == false){
+    if (await userQuery(dynamodb_client,user_id).Count == 1){
       return false;
     }
     
@@ -51,28 +51,8 @@ export async function addUser(dynamodb_client,username,password,email) {
     
 }
 
-// function to check if he generated user id is unique in the data base
-export async function checkUnique(dynamodb_client,query_user_id) {
-  const input = {
-    "TableName": "users", // Replace with your DynamoDB table name
-    "KeyConditionExpression": 'user_id = :partitionKey', // Replace 'id' with your partition key name
-    "ExpressionAttributeValues": {
-        ":partitionKey":{
-          "N":query_user_id.toString()
-        }
-    }
-  };
 
-  const command = new QueryCommand(input);
-  const response  = await dynamodb_client.send(command);
-
-  if (!response.Items || response.Items.length === 0 ) {
-    return true
-  } 
-  return false;
-}
-
-export async function login(dynamodb_client,query_user_id) {
+export async function userQuery(dynamodb_client,query_user_id) {
   const input = {
     "TableName": "users", // Replace with your DynamoDB table name
     "KeyConditionExpression": 'user_id = :partitionKey', // Replace 'id' with your partition key name
@@ -88,7 +68,7 @@ export async function login(dynamodb_client,query_user_id) {
 
   //console.log(response);
 
-  if(response && response.Count == 1){
+  if(response.Count == 1){
     return response;
 
   }else{

@@ -1,7 +1,17 @@
+import React, { useState } from 'react';
 import './Button.css';
 
-function Button({handleClick,buttonmsg}){
+function Button({onClick,buttonmsg}){
+    
+    const [style, setStyle] = useState("button");
+
+    const handleClick = () => {
+        setStyle("buttonclicked");
+        console.log("button clicked");
+        //onClick(e);
+    }
+
     return(
-        <button onClick={handleClick}>{buttonmsg}</button>
+        <button className={style}  onClick={handleClick}>{buttonmsg}</button>
     )
 } export default Button;

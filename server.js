@@ -1,5 +1,5 @@
 import http from "http";
-import { addUser, dynamodb_client, login } from "./dynamodb_client.js";
+import { addUser,userQuery, dynamodb_client } from "./dynamodb_client.js";
 import cors from 'cors'
 import express from "express"
 import hash from 'hash-it'
@@ -60,7 +60,7 @@ app.post("/login", async (req, res) => {
     var saltedpassword = hash(password+process.env.SALT);
     var query_user_id = hash(username+saltedpassword);
 
-    const result = await login(dynamodb_client,query_user_id);
+    const result = await userQuery(dynamodb_client,query_user_id);
 
     if(!result || result.Items[0].password.S != saltedpassword){
       console.log("login failed");
