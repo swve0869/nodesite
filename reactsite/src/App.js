@@ -21,14 +21,18 @@ function App() {
     email:"",
   });
 
-  loggedIn ? console.log( ` ${userInfo.username} logged in logged in`) : console.log("/ not logged in");
-
 
   function handleLogin(user_data) {
-    setuserInfo({user_data});
+    user_data.loggedIn = true;
+    console.log(user_data);
+    setuserInfo(user_data);
     setLoggedIn(true);
-    //navigate('/Homepage');
+    //loggedIn ? console.log( ` ${userInfo.username} logged in logged in`) : console.log("/ not logged in");
+
+    navigate('/Homepage');
    }
+
+   loggedIn ? console.log( ` ${userInfo.username} logged in`) : console.log("/ not logged in");
 
 
   return (

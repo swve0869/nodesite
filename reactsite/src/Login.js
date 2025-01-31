@@ -75,7 +75,7 @@ const Login = ({handleLogin}) => {
                     />
                 </div>
                 <Alert severity="error">This is an error alert — check it out!</Alert>
-                <button type="submit" onClick={handleSubmit} buttonmsg="Login">Login</button>
+                <Button type="submit" onClick={handleSubmit} buttonmsg="Login" style="button">Login</Button>
             </form>
         </Box>
     );
