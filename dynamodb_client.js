@@ -16,6 +16,7 @@ const config = {
 
 import { DynamoDBClient,PutItemCommand,QueryCommand,ScanCommand } from "@aws-sdk/client-dynamodb"; // ES6 import
 import { PutCommand } from '@aws-sdk/lib-dynamodb';
+import e from 'cors';
 
 // Bare-bones DynamoDB Client
 export const dynamodb_client = new DynamoDBClient(config);
@@ -31,24 +32,15 @@ export async function addUser(dynamodb_client,username,password,email) {
     }
     
     const input = {
-        "TableName": "users",
-        "Item": {
-          "user_id": {
-            "N": user_id.toString()
-          },
-          "password": {
-            "S": saltedpassword.toString()
-          },
-          "username": {
-            "S": username
-          },
-          "email":{
-            "S": email
-          }
-        },
-        "ReturnConsumedCapacity": "TOTAL",
-        
-      };
+      "TableName": "users",
+      "Item": {
+        "user_id": { "N": user_id.toString() },
+        "password": { "S": saltedpassword.toString() },
+        "username": { "S": username },
+        "email": { "S": email }
+      },
+      "ReturnConsumedCapacity": "TOTAL"
+    };
       //console.log(input)
       const command = new PutItemCommand(input);
       const response = await dynamodb_client.send(command);
@@ -80,10 +72,7 @@ export async function checkUnique(dynamodb_client,query_user_id) {
   return false;
 }
 
-export async function login(dynamodb_client,username,password) {
-  var saltedpassword = hash(password+process.env.SALT);
-  var query_user_id = hash(username+saltedpassword);
-
+export async function login(dynamodb_client,query_user_id) {
   const input = {
     "TableName": "users", // Replace with your DynamoDB table name
     "KeyConditionExpression": 'user_id = :partitionKey', // Replace 'id' with your partition key name
@@ -94,25 +83,16 @@ export async function login(dynamodb_client,username,password) {
     }
   }; 
 
-  //":password":{"S":saltedpassword.toString()},
-  console.log(`attempting login with username: ${username} and saltedpassword: ${saltedpassword}`);
-
   const command = new QueryCommand(input);
   const response  = await dynamodb_client.send(command);
 
-  console.log(response);
+  //console.log(response);
 
-  if(response.Count == 1){
-    const user_data = {
-      username: response.Items[0].username.S ,
-      password: response.Items[0].password.S,
-      user_id: response.Items[0].user_id.N
-    }
-    
-    console.log(user_data);
-    console.log(response.Items[0].username.S + " successfully logged in");
-    //console.log(username + " found");
+  if(response && response.Count == 1){
+    return response;
+
   }else{
-    console.log(username + " not found");
+    return false;
   }
 }
+

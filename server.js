@@ -2,6 +2,8 @@ import http from "http";
 import { addUser, dynamodb_client, login } from "./dynamodb_client.js";
 import cors from 'cors'
 import express from "express"
+import hash from 'hash-it'
+
 
 
 const corsOptions = {
@@ -53,11 +55,26 @@ app.post("/newuser", async (req, res) => {
 app.post("/login", async (req, res) => {
 
   try{
-    const { username, password} = req.body;
+    const {username, password} = req.body;
     console.log(`trying to login: ${username} with password: ${password}`);
-    console.log(username,password);
-    
-    const result = await login(dynamodb_client,username,password);
+    var saltedpassword = hash(password+process.env.SALT);
+    var query_user_id = hash(username+saltedpassword);
+
+    const result = await login(dynamodb_client,query_user_id);
+
+    if(!result || result.Items[0].password.S != saltedpassword){
+      console.log("login failed");
+      return res.status(201).json({ message: 'Login Failed Username or Password Incorrect',errorcode: '1' }); 
+    }
+
+    const user_data = {
+      username: result.Items[0].username.S ,
+      password: result.Items[0].password.S,
+      user_id: result.Items[0].user_id.N,
+      email: result.Items[0].email.S
+    }
+    console.log(user_data);
+    return res.status(200).json({ message: `Succesfully Logged In `,user_data,errorcode: '0' });
   
   }catch (error){
 
