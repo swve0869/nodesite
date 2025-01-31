@@ -3,7 +3,6 @@ import 'dotenv/config'
 import crypto from 'crypto'
 import hash from 'hash-it'
 
-console.log(process.env.DB_ACCESS_KEY)
 
 const config = {
     region:'us-west-2',
@@ -22,11 +21,11 @@ import { PutCommand } from '@aws-sdk/lib-dynamodb';
 export const dynamodb_client = new DynamoDBClient(config);
 
 
+export async function addUser(dynamodb_client,username,password,email) {
 
-export async function addUser(dynamodb_client,username,password) {
-
-    var user_id = hash(username)
-
+    
+    var saltedpassword = hash(password+process.env.SALT);
+    var user_id = hash(username+saltedpassword);
     if (await checkUnique(dynamodb_client,user_id) == false){
       return false;
     }
@@ -38,14 +37,17 @@ export async function addUser(dynamodb_client,username,password) {
             "N": user_id.toString()
           },
           "password": {
-            "S": password
+            "S": saltedpassword.toString()
           },
           "username": {
             "S": username
+          },
+          "email":{
+            "S": email
           }
         },
         "ReturnConsumedCapacity": "TOTAL",
-
+        
       };
       //console.log(input)
       const command = new PutItemCommand(input);
@@ -64,34 +66,53 @@ export async function checkUnique(dynamodb_client,query_user_id) {
     "KeyConditionExpression": 'user_id = :partitionKey', // Replace 'id' with your partition key name
     "ExpressionAttributeValues": {
         ":partitionKey":{
-          "N":query_user_id.toString() // Value to query by
+          "N":query_user_id.toString()
         }
     }
   };
 
-/*   const input2 = {
-    TableName: "users", // Replace with your DynamoDB table name
-    KeyConditionExpression: 'username = :Username', // Replace 'id' with your partition key name
-    ExpressionAttributeValues: {
-        ":Username":{
-          "S":username // Value to query by
-        }
-    }
-  }; */
-
-
   const command = new QueryCommand(input);
   const response  = await dynamodb_client.send(command);
 
-  // console.log("res",response)
-
- /*  const command2 = new QueryCommand(input2);
-  const response2 = await dynamodb_client.send(command2);
-  console.log("res2", response2) */
-0
   if (!response.Items || response.Items.length === 0 ) {
     return true
   } 
   return false;
 }
 
+export async function login(dynamodb_client,username,password) {
+  var saltedpassword = hash(password+process.env.SALT);
+  var query_user_id = hash(username+saltedpassword);
+
+  const input = {
+    "TableName": "users", // Replace with your DynamoDB table name
+    "KeyConditionExpression": 'user_id = :partitionKey', // Replace 'id' with your partition key name
+    "ExpressionAttributeValues": {
+        ":partitionKey":{
+          "N": query_user_id.toString() 
+        }
+    }
+  }; 
+
+  //":password":{"S":saltedpassword.toString()},
+  console.log(`attempting login with username: ${username} and saltedpassword: ${saltedpassword}`);
+
+  const command = new QueryCommand(input);
+  const response  = await dynamodb_client.send(command);
+
+  console.log(response);
+
+  if(response.Count == 1){
+    const user_data = {
+      username: response.Items[0].username.S ,
+      password: response.Items[0].password.S,
+      user_id: response.Items[0].user_id.N
+    }
+    
+    console.log(user_data);
+    console.log(response.Items[0].username.S + " successfully logged in");
+    //console.log(username + " found");
+  }else{
+    console.log(username + " not found");
+  }
+}

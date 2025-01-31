@@ -60,7 +60,7 @@ const Login = ({handleLogin}) => {
             <h2>Login</h2>
             <form >
                 <div>
-                    <label>Email:</label>
+                    <label>Username:</label>
                     <input
                         type="username"
                         value={username}

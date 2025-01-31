@@ -1,5 +1,5 @@
 import http from "http";
-import { addUser, dynamodb_client } from "./dynamodb_client.js";
+import { addUser, dynamodb_client, login } from "./dynamodb_client.js";
 import cors from 'cors'
 import express from "express"
 
@@ -28,15 +28,17 @@ app.get("/api", (req, res) => {
 app.post("/newuser", async (req, res) => {
 
   try{
-    const { username, password} = req.body;
+    const { username, password,email} = req.body;
     console.log(username,password);
     
-    const result =  await addUser(dynamodb_client,username,password); 
-    if(result == false){    //if user already exists
+    const result =  await addUser(dynamodb_client,username,password,email); 
+    //if user already exists
+    if(result == false){    
       console.log(username, " is not unique");
       return res.status(201).json({ message: 'Username not Unique',errorcode: '1' }); 
-    }   // else user succesfully added exist
-    return res.status(200).json({ message: 'Succesfully added user ',errorcode: '0' });
+    }   
+    // else user succesfully added exist
+    return res.status(200).json({ message: `Succesfully added ${username}`,errorcode: '0' });
 
   }catch (error) {
     console.log('Error in user creation:', error);
@@ -52,11 +54,11 @@ app.post("/login", async (req, res) => {
 
   try{
     const { username, password} = req.body;
-    console.log("trying to login: ");
+    console.log(`trying to login: ${username} with password: ${password}`);
     console.log(username,password);
     
-    
-
+    const result = await login(dynamodb_client,username,password);
+  
   }catch (error){
 
   }

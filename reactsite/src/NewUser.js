@@ -18,13 +18,15 @@ const NewUser = ({handleLogin}) => {
     const handleSubmit = async(e) => {
         e.preventDefault();
         // Handle login logic here
-        console.log('Email:', username);
+        console.log('username:', username);
         console.log('Password:', password);
 
         const url = `${BASE_URL}/newuser`
         var jsonData = {
         "username" : username,
-        "password" : password}
+        "password" : password,
+        "email" : email
+        }
 
         const fetchData = { 
             method: 'POST', 
