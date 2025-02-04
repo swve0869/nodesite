@@ -17,28 +17,23 @@ const NewUser = ({handleLogin}) => {
 
     const handleSubmit = async(e) => {
         e.preventDefault();
-        // Handle login logic here
-        console.log('username:', username);
-        console.log('Password:', password);
-
+        
         const url = `${BASE_URL}/newuser`
-        var jsonData = {
-        "username" : username,
-        "password" : password,
-        "email" : email
-        }
-
+    
         const fetchData = { 
             method: 'POST', 
             headers: { 'Content-Type': 'application/json',  },
-            body: JSON.stringify(jsonData) // body data type must match "Content-Type" header
+            body: JSON.stringify({
+                "username" : username,
+                "password" : password,
+                "email" : email
+                }) // body data type must match "Content-Type" header
         }
 
-        // api call with fetch        
+        // api call for /newuser endpoint      
         const data = await fetch(url, fetchData)
         .then((response) => response.json())
         .then((data) => {console.log('Success:', data)
-            console.log(data.message)
             return data
         })
         .catch((error) => console.error('Got this ERror:', error)); 
@@ -50,7 +45,7 @@ const NewUser = ({handleLogin}) => {
         else{
             console.log("going to home page");
             console.log("created new user")
-            handleLogin(data);
+            handleLogin(data.user_data);
             navigate('/Homepage');
             
         } 
