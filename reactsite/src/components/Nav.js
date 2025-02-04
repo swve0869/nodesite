@@ -1,22 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './Nav.css'; // Assuming you have some CSS for styling
+import Box from './Box';
 
-const Nav = () => {
+const Nav = ({navItems}) => {
     return (
         <nav className="navbar">
-            <h1>My Website</h1>
-            <ul className="nav-links">
+                {navItems.map(item =>
                 <li>
-                    <Link to="/">Home</Link>
-                </li>
-                <li>
-                    <Link to="/about">About</Link>
-                </li>
-                <li>
-                    <Link to="/contact">Contact</Link>
-                </li>
-            </ul>
+                    
+                    <Link to={item.path}>{item.name}</Link>
+                    
+                </li>)}
         </nav>
     );
 };

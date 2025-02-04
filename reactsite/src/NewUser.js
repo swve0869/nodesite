@@ -50,7 +50,7 @@ const NewUser = ({handleLogin}) => {
         else{
             console.log("going to home page");
             console.log("created new user")
-            handleLogin();
+            handleLogin(data);
             navigate('/Homepage');
             
         } 

@@ -35,7 +35,7 @@ app.post("/newuser", async (req, res) => {
     
     const result =  await addUser(dynamodb_client,username,password,email); 
     //if user already exists
-    if(result == false){    
+    if(result === false){    
       console.log(username, " is not unique");
       return res.status(201).json({ message: 'Username not Unique',errorcode: '1' }); 
     }   

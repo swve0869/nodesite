@@ -27,7 +27,9 @@ export async function addUser(dynamodb_client,username,password,email) {
     
     var saltedpassword = hash(password+process.env.SALT);
     var user_id = hash(username+saltedpassword);
-    if (await userQuery(dynamodb_client,user_id).Count == 1){
+    let exists = await userQuery(dynamodb_client,user_id);
+    console.log(exists.Count);
+    if (exists.Count === 1){
       return false;
     }
     
@@ -37,7 +39,8 @@ export async function addUser(dynamodb_client,username,password,email) {
         "user_id": { "N": user_id.toString() },
         "password": { "S": saltedpassword.toString() },
         "username": { "S": username },
-        "email": { "S": email }
+        "email": { "S": email },
+        "date" : { "S": new Date().toISOString()}
       },
       "ReturnConsumedCapacity": "TOTAL"
     };
