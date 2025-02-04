@@ -24,11 +24,9 @@ export const dynamodb_client = new DynamoDBClient(config);
 
 export async function addUser(dynamodb_client,username,password,email) {
 
-    
     var saltedpassword = hash(password+process.env.SALT);
-    var user_id = hash(username+saltedpassword);
+    var user_id = hash(username);
     let exists = await userQuery(dynamodb_client,user_id);
-    console.log(exists.Count);
     if (exists.Count === 1){
       return false;
     }

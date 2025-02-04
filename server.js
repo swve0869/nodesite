@@ -58,7 +58,7 @@ app.post("/login", async (req, res) => {
     const {username, password} = req.body;
     console.log(`trying to login: ${username} with password: ${password}`);
     var saltedpassword = hash(password+process.env.SALT);
-    var query_user_id = hash(username+saltedpassword);
+    var query_user_id = hash(username);
 
     const result = await userQuery(dynamodb_client,query_user_id);
 
@@ -69,7 +69,6 @@ app.post("/login", async (req, res) => {
 
     const user_data = {
       username: result.Items[0].username.S ,
-      password: result.Items[0].password.S,
       user_id: result.Items[0].user_id.N,
       email: result.Items[0].email.S
     }
