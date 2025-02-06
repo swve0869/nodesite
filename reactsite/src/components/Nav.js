@@ -1,17 +1,46 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './Nav.css'; // Assuming you have some CSS for styling
-import Box from './Box';
+//import Box from './Box';
 
-const Nav = ({navItems}) => {
+/* style = {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+  }
+ */
+
+const Nav = (loggedIn) => {
+
+    const navItems = [
+        { name: 'Login', path: '/Login' },
+        { name: 'New User', path: '/NewUser' },
+        { name: 'Homepage', path: '/Homepage' },
+        { name: 'Logout', path: '/Logout' }
+      ]
+    
+
     return (
-        <nav className="navbar">
-                {navItems.map(item =>
-                <li>
-                    
-                    <Link to={item.path}>{item.name}</Link>
-                    
-                </li>)}
+        <nav className="navbar" >
+            <ul>
+                <a> 
+                    <li>           
+                    <Link margin="20"to={'/Login'}>Login</Link>
+                    </li> 
+                    <li>           
+                    <Link margin="20"to={'/NewUser'}>New Users</Link>
+                    </li> 
+                    <li>           
+                    <Link margin="20"to={'/Homepage'}>Home</Link>
+                    </li> 
+                    <li marginLeft= 'auto'>
+                        <Link to={'/Logout'}>Logout</Link>
+                    </li>
+                </a>
+            </ul>
+
+
         </nav>
     );
 };

@@ -4,6 +4,7 @@ import './App.css';
 import { Route, Routes, Link } from 'react-router-dom';
 import Homepage from './Homepage.js';   
 import Login from "./Login.js";
+import Logout from "./Logout.js";
 import Button from "./components/Button.js";  
 import {useNavigate} from "react-router-dom";
 import Nav from "./components/Nav.js";
@@ -17,44 +18,39 @@ function App() {
   
   let [loggedIn, setLoggedIn] = React.useState(false);
   let [userInfo, setuserInfo] = React.useState({
-    username:"ooga",
+    username:"",
     userid:"",
     email:"",
   });
 
 
   function handleLogin(user_data) {
+    if(!loggedIn){
     user_data.loggedIn = true;
     console.log(user_data);
     setuserInfo(user_data);
     setLoggedIn(true);
-    //loggedIn ? console.log( ` ${userInfo.username} logged in logged in`) : console.log("/ not logged in");
-
+    }
     navigate('/Homepage');
+
    }
 
-   loggedIn ? console.log( ` ${userInfo.username} logged in`) : console.log("/ not logged in");
+   //if (!loggedIn) navigate('/Login')  
 
-  const navItems = [
-    { name: 'Login', path: '/Login' },
-    { name: 'New User', path: '/NewUser' },
-    { name: 'Homepage', path: '/Homepage' }
-  ]
 
   return (
     <div className="App">
 
-        <Nav navItems={navItems} />
+        <Nav />
 
-        <Button className="button"/>
-
-        {userInfo.loggedIn ? <div>YOure now logged in</div> : <div>not logged in</div>}
-        
+{/*         {userInfo.loggedIn ? <div></div> : <div>not logged in</div>}
+ */}        
         
           <Routes>
-            <Route path="/Login" element={<Login handleLogin={handleLogin}/>}/>
-            <Route path="/NewUser" element={<NewUser handleLogin={handleLogin}/>}/>
+            <Route path="/Login" element={<Login handleLogin={handleLogin} loggedIn={loggedIn}/>}/>
+            <Route path="/NewUser" element={<NewUser handleLogin={handleLogin} loggedIn={loggedIn}/>}/>
             <Route path="/Homepage" element={<Homepage loggedIn = {loggedIn} userInfo = {userInfo}/>}/>
+            <Route path="/Logout" element={<Logout loggedIn={loggedIn} setLoggedIn={setLoggedIn} setuserInfo={setuserInfo}/>}/>
           </Routes>
   
     </div>
