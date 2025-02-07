@@ -2,13 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 //import './Box.css'; // Assuming you have some CSS for the Box component
 
-const Box = ({ children, className,width,height  }) => {
+const Box = ({ children, className}) => {
     const boxStyle = {
-        width: width,
-        height: height,
-        border: '1px solid #ccc',
+        
+        maxWidth: '400px',
+        border: '2px solid #ccc',
         padding: '20px',
-        borderRadius: '30px',
+        margin: '20px',
+        borderRadius: '20px',
         backgroundColor: '#f9f9f9'
     };
 

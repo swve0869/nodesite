@@ -26,16 +26,14 @@ function App() {
 
   function handleLogin(user_data) {
     if(!loggedIn){
-    user_data.loggedIn = true;
     console.log(user_data);
     setuserInfo(user_data);
     setLoggedIn(true);
     }
     navigate('/Homepage');
+  }
 
-   }
-
-   //if (!loggedIn) navigate('/Login')  
+   
 
 
   return (
@@ -43,12 +41,12 @@ function App() {
 
         <Nav />
 
-{/*         {userInfo.loggedIn ? <div></div> : <div>not logged in</div>}
- */}        
+        {userInfo.loggedIn ? <div></div> : <div>not logged in</div>}
+        
         
           <Routes>
             <Route path="/Login" element={<Login handleLogin={handleLogin} loggedIn={loggedIn}/>}/>
-            <Route path="/NewUser" element={<NewUser handleLogin={handleLogin} loggedIn={loggedIn}/>}/>
+            <Route path="/NewUser" element={<NewUser handleLogin={handleLogin} loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>}/>
             <Route path="/Homepage" element={<Homepage loggedIn = {loggedIn} userInfo = {userInfo}/>}/>
             <Route path="/Logout" element={<Logout loggedIn={loggedIn} setLoggedIn={setLoggedIn} setuserInfo={setuserInfo}/>}/>
           </Routes>

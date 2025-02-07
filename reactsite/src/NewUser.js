@@ -2,14 +2,13 @@ import React, { useState } from 'react';
 //import "./NewUser.css";
 import md5 from 'md5';
 import {useNavigate} from "react-router-dom";
-import Homepage from './Homepage.js';   
-//import axios from 'axios'
-
+import Box from './components/Box.js';
+import './Form.css'
 import BASE_URL from './config.js';
 
 
 
-const NewUser = ({handleLogin}) => {
+const NewUser = ({handleLogin,setLoggedIn}) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
@@ -43,29 +42,30 @@ const NewUser = ({handleLogin}) => {
             console.log("time to change site");
         }
         else{
-            console.log("going to home page");
+            setLoggedIn(false);
+            console.log(data.user_data);
             console.log("created new user")
             handleLogin(data.user_data);
-            navigate('/Homepage');
-            
+            navigate('/Homepage');      
         } 
     };
 
 
     return (
-        <div>
-            <h2>New User</h2>
-            <form >
-            <div>
-                <label>Username:</label>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 'vh' }}>
+            <Box className="genericbox">
+                <h2>New User</h2>
+                <form>
+                    <div className="form-group">
+                    <label>Username:</label>
                     <input
                         type="username"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
                         required
                     />
-                </div>
-                <div>
+                    </div>
+                    <div className="form-group">
                     <label>Email:</label>
                     <input
                         type="email"
@@ -73,8 +73,8 @@ const NewUser = ({handleLogin}) => {
                         onChange={(e) => setEmail(e.target.value)}
                         required
                     />
-                </div>
-                <div>
+                    </div>
+                    <div className="form-group">
                     <label>Password:</label>
                     <input
                         type="password"
@@ -82,9 +82,10 @@ const NewUser = ({handleLogin}) => {
                         onChange={(e) => setPassword(e.target.value)}
                         required
                     />
-                </div>
-                <button type="submit" onClick={handleSubmit}>Create {username}{username ==="" ? '':'\'s '}Account</button>
-            </form>
+                    </div>
+                    <button type="submit" onClick={handleSubmit}>Create {username}{username === "" ? '' : '\'s '}Account</button>
+                </form>
+            </Box>
         </div>
     );
 };

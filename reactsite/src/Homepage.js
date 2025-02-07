@@ -2,7 +2,7 @@ function Homepage(props) {
 
     props.loggedIn ? console.log("logged in HM") : console.log("not logged in HM");
 
-    console.log(props.userInfo);
+    //console.log(props.userInfo);
 
     return (
         <div className="homepage">
