@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import NewUser from "./NewUser";
 import './App.css';
 import { Route, Routes, Link } from 'react-router-dom';
@@ -31,6 +31,8 @@ function App() {
     setLoggedIn(true);
     }
     navigate('/Homepage');
+    //useEffect(() => {navigate('/Homepage');},[navigate])
+  
   }
 
    
@@ -42,7 +44,6 @@ function App() {
         <Nav />
 
         {userInfo.loggedIn ? <div></div> : <div>not logged in</div>}
-        
         
           <Routes>
             <Route path="/Login" element={<Login handleLogin={handleLogin} loggedIn={loggedIn}/>}/>

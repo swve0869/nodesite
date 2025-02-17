@@ -5,6 +5,8 @@ import {useNavigate} from "react-router-dom";
 import Box from './components/Box.js';
 import './Form.css'
 import BASE_URL from './config.js';
+import Alert from '@mui/material/Alert';
+
 
 
 
@@ -12,6 +14,8 @@ const NewUser = ({handleLogin,setLoggedIn}) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
+    
     const navigate = useNavigate();
 
     const handleSubmit = async(e) => {
@@ -83,6 +87,10 @@ const NewUser = ({handleLogin,setLoggedIn}) => {
                         required
                     />
                     </div>
+                    <div type="alert">
+                        {errorMessage? <Alert severity="error">{errorMessage}</Alert> : <a></a>}
+                    </div>
+
                     <button type="submit" onClick={handleSubmit}>Create {username}{username === "" ? '' : '\'s '}Account</button>
                 </form>
             </Box>

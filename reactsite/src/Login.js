@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {useNavigate} from "react-router-dom";
 import BASE_URL from './config.js';
 import Box from './components/Box.js';
@@ -25,8 +25,6 @@ const Login = ({handleLogin,loggedIn}) => {
             return;
         }
 
-
-
         const url = `${BASE_URL}/login`
         var jsonData = {
         "username" : username,
@@ -50,7 +48,8 @@ const Login = ({handleLogin,loggedIn}) => {
                 setErrorMessage("Incorrect username or password!")
             }
             else{
-                handleLogin(data.user_data);            
+                handleLogin(data.user_data);
+                //useEffect(() => {handleLogin(data.user_data);},[])        
             } 
         })
         .catch((error) => {
