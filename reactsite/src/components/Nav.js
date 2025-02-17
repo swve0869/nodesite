@@ -11,7 +11,7 @@ import './Nav.css'; // Assuming you have some CSS for styling
   }
  */
 
-const Nav = (loggedIn,userInfo) => {
+const Nav = ({loggedIn,handleLogin,userInfo}) => {
 
     const navItems = [
         { name: 'Login', path: '/Login' },
@@ -20,6 +20,9 @@ const Nav = (loggedIn,userInfo) => {
         { name: 'Logout', path: '/Logout' }
       ]
     
+    const handleClick = () => {
+        handleLogin({})
+      }
 
     return (
         <nav className="navbar" >
@@ -33,11 +36,11 @@ const Nav = (loggedIn,userInfo) => {
                     </li> 
                     <li>           
                     <Link margin="20"to={'/Homepage'}>Home</Link>
-                    </li> 
-                    <li>
-                    <Link to={'/Logout'}>Logout</Link>
                     </li>
-                    {}
+                    {loggedIn ? 
+                    <li>
+                    <a onClick={handleClick}>Logout</a>
+                    </li> : null}
                 
             </ul>
 
@@ -47,3 +50,5 @@ const Nav = (loggedIn,userInfo) => {
 };
 
 export default Nav;
+
+// <Link to={'/Logout'}>Logout</Link>

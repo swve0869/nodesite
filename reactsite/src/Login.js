@@ -1,21 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import {useNavigate} from "react-router-dom";
+import React, { useState } from 'react';
 import BASE_URL from './config.js';
 import Box from './components/Box.js';
 import Alert from '@mui/material/Alert';
-import Button from './components/Button.js';
 import './Form.css'
 
 
 
 const Login = ({handleLogin,loggedIn}) => {
-    if(loggedIn){
-        handleLogin();
-    }
-
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+
+    if(loggedIn){
+        return(
+            <div>
+            <h1>You are already logged in</h1>
+            </div>
+        )
+    }
     
     const handleSubmit = async(e) => {
         e.preventDefault();
@@ -37,7 +39,7 @@ const Login = ({handleLogin,loggedIn}) => {
         }
 
         // api call with fetch        
-        const data = await fetch(url, fetchData)
+        await fetch(url, fetchData)
         .then((response) => response.json())
         .then((data) => {
             console.log('Success:', data)
@@ -84,7 +86,7 @@ const Login = ({handleLogin,loggedIn}) => {
                         />
                         </div>
                         <div type ="alert">
-                        {errorMessage? <Alert severity="error">{errorMessage}</Alert> : <a></a>}
+                        {errorMessage? <Alert severity="error">{errorMessage}</Alert> : null}
                         </div>
                         <div className={"form-group"}>
                         <button type="submit" onClick={handleSubmit} >Login</button>

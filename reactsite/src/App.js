@@ -1,11 +1,10 @@
 import React, { useEffect } from "react";
 import NewUser from "./NewUser";
 import './App.css';
-import { Route, Routes, Link } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import Homepage from './Homepage.js';   
 import Login from "./Login.js";
 import Logout from "./Logout.js";
-import Button from "./components/Button.js";  
 import {useNavigate} from "react-router-dom";
 import Nav from "./components/Nav.js";
 
@@ -17,6 +16,7 @@ function App() {
   const navigate = useNavigate();
   
   let [loggedIn, setLoggedIn] = React.useState(false);
+  let [firstLogin, setFirstLogin] = React.useState(false);
   let [userInfo, setuserInfo] = React.useState({
     username:"",
     userid:"",
@@ -29,21 +29,37 @@ function App() {
     console.log(user_data);
     setuserInfo(user_data);
     setLoggedIn(true);
+    setFirstLogin(true);
+    }else{
+      setLoggedIn(false);
+      setuserInfo({});
     }
-    navigate('/Homepage');
-    //useEffect(() => {navigate('/Homepage');},[navigate])
-  
   }
 
-   
 
+  // once loggedIn 
+  useEffect(() => {
+    if(firstLogin){
+      setFirstLogin(false);
+      navigate('/Homepage')}
+   
+    },[firstLogin,navigate])
+
+    /* useEffect(() => {
+      if(!loggedIn){
+        setFirstLogin(false);
+        navigate('/Login')}
+     
+      },[loggedIn,navigate]) */
+  
+   
 
   return (
     <div className="App">
 
-        <Nav />
+        <Nav loggedIn={loggedIn} handleLogin={handleLogin}/>
 
-        {userInfo.loggedIn ? <div></div> : <div>not logged in</div>}
+        {loggedIn ? <div></div> : <div>not logged in</div>}
         
           <Routes>
             <Route path="/Login" element={<Login handleLogin={handleLogin} loggedIn={loggedIn}/>}/>
