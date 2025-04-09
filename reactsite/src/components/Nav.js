@@ -26,23 +26,23 @@ const Nav = ({loggedIn,handleLogin,userInfo}) => {
 
     return (
         <nav className="navbar" >
+            <div>
             <ul>
-             
-                    <li>           
-                    <Link margin="20"to={'/Login'}>Login</Link>
-                    </li> 
-                    <li>           
-                    <Link margin="20"to={'/NewUser'}>New Users</Link>
-                    </li> 
-                    <li>           
-                    <Link margin="20"to={'/Homepage'}>Home</Link>
-                    </li>
-                    {loggedIn ? 
-                    <li>
-                    <a onClick={handleClick}>Logout</a>
-                    </li> : null}
-                
+                <li>           
+                <Link margin="20"to={'/Login'}>Login</Link>
+                </li> 
+                <li>           
+                <Link margin="20"to={'/NewUser'}>New Users</Link>
+                </li> 
+                <li>           
+                <Link margin="20"to={'/Homepage'}>Home</Link>
+                </li>
+                {loggedIn ? 
+                <li>
+                <a onClick={handleClick}>Logout</a>
+                </li> : null}  
             </ul>
+            </div>
 
 
         </nav>

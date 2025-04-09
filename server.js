@@ -4,8 +4,6 @@ import cors from 'cors'
 import express from "express"
 import hash from 'hash-it'
 
-// Am In the right branch?
-
 const corsOptions = {
   origin: 'http://localhost:3000', // Replace with the URL you want to allow
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allow specific HTTP methods
@@ -14,6 +12,8 @@ const corsOptions = {
   optionsSuccessStatus: 204 // Some legacy browsers choke on 204
 };
  
+
+//https requirements including SSL certs
 
 
 const app = express();
