@@ -2,18 +2,30 @@ name: nodesite
 
 on: push
 
-
 jobs: 
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix :
+        node-version: [18.19.1,18.19.1]
+        npm-version: [9.2.0,9.2.0]
+        
+        
     steps:
-    - uses : actions/checkout@v2
+    - uses : actions/checkout@v4
 
-    - name : echo test
-      run : echo "hello"
+    - name: Setup Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
 
-    - name : install dependencies
-      run : sudo apt install npm
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Build
+      run: npm run build
+      
 
  
     
