@@ -1,0 +1,19 @@
+name: nodesite
+
+on: push
+
+
+jobs: 
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses : actions/checkout@v2
+
+    - name : echo test
+      run : echo "hello"
+
+    - name : install npm
+      run: apt install npm
+    
+      
+  
