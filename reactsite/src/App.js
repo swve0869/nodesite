@@ -8,8 +8,6 @@ import Logout from "./Logout.js";
 import {useNavigate} from "react-router-dom";
 import Nav from "./components/Nav.js";
 
-//import BASE_URL from './config.js';
-
 
 function App() {
 
