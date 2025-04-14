@@ -2,6 +2,8 @@ import http from "http";
 import { addUser,userQuery, dynamodb_client } from "./dynamodb_client.js";
 import cors from 'cors'
 import express from "express"
+import fs from "fs"
+import https from "https"
 import hash from 'hash-it'
 
 const corsOptions = {
@@ -14,11 +16,24 @@ const corsOptions = {
  
 
 //https requirements including SSL certs
+var key = fs.readFileSync('servercerts/selfsigned.key');
+var cert = fs.readFileSync('servercerts/selfsigned.crt');
+var options = {
+  key: key,
+  cert: cert
+};
 
 
 const app = express();
 app.use(cors(corsOptions));
 app.use(express.json());
+
+// create server object TESTING
+var server = https.createServer(options, app);
+server.listen(3002, () => {
+  console.log("server starting on 3002 " )
+});
+
 
 app.get("/api", (req, res) => {
    console.log(req.body)
@@ -26,6 +41,11 @@ app.get("/api", (req, res) => {
    console.log("request received")
  });
 
+ app.get("/", (req, res) => {
+  console.log(req.body)
+  res.json({ message: "hello from serv" });
+  console.log("request received")
+});
 
 app.post("/newuser", async (req, res) => {
 

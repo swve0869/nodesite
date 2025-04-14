@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import BASE_URL from './config.js';
+import NODE_URL from './config.js';
 import Box from './components/Box.js';
 import Alert from '@mui/material/Alert';
 import './Form.css'
@@ -27,7 +27,8 @@ const Login = ({handleLogin,loggedIn}) => {
             return;
         }
 
-        const url = `${BASE_URL}/login`
+        const url = `${NODE_URL}/login`
+        //const url = process.env.NODE_URL + `/login`
         var jsonData = {
         "username" : username,
         "password" : password}

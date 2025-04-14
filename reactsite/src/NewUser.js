@@ -4,7 +4,7 @@ import md5 from 'md5';
 import {useNavigate} from "react-router-dom";
 import Box from './components/Box.js';
 import './Form.css'
-import BASE_URL from './config.js';
+import NODE_URL from './config.js';
 import Alert from '@mui/material/Alert';
 
 
@@ -21,7 +21,7 @@ const NewUser = ({handleLogin,setLoggedIn}) => {
     const handleSubmit = async(e) => {
         e.preventDefault();
         
-        const url = `${BASE_URL}/newuser`
+        const url = `${NODE_URL}/newuser`
     
         const fetchData = { 
             method: 'POST', 
