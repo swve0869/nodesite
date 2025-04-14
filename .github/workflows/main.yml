@@ -12,8 +12,7 @@ jobs:
     - name : echo test
       run : echo "hello"
 
-    - name : install npm
-      run: apt install npm
+ 
     
       
   
