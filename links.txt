@@ -8,3 +8,15 @@ https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Query.KeyCondit
 react + node.js set up
 https://www.freecodecamp.org/news/how-to-create-a-react-app-with-a-node-backend-the-complete-guide/
 
+adding https to node server
+https://stackoverflow.com/questions/11744975/enabling-https-on-express-js
+
+
+TODO
+
+- write a login test script
+- make nodejs server https
+- Clean up navbar
+- figure out how to center components
+- learn css styline cascading thing
+- add user cookies

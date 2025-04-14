@@ -1,26 +1,31 @@
 import React, { useState } from 'react';
-import {useNavigate} from "react-router-dom";
 import BASE_URL from './config.js';
 import Box from './components/Box.js';
 import Alert from '@mui/material/Alert';
-import Button from './components/Button.js';
+import './Form.css'
 
 
 
-const Login = ({handleLogin}) => {
+const Login = ({handleLogin,loggedIn}) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
 
+    if(loggedIn){
+        return(
+            <div>
+            <h1>You are already logged in</h1>
+            </div>
+        )
+    }
+    
     const handleSubmit = async(e) => {
         e.preventDefault();
         // Handle login logic here
         if (!username || !password){
-            console.log("missing username or password")
-            
+            setErrorMessage("Please fill out all fields")
+            return;
         }
-
-        console.log('Email:', username);
-        console.log('Password:', password);
 
         const url = `${BASE_URL}/login`
         var jsonData = {
@@ -34,50 +39,61 @@ const Login = ({handleLogin}) => {
         }
 
         // api call with fetch        
-        const data = await fetch(url, fetchData)
+        await fetch(url, fetchData)
         .then((response) => response.json())
-        .then((data) => {console.log('Success:', data)
+        .then((data) => {
+            console.log('Success:', data)
             console.log(data.message)
-            return data
+            // Check if login was successful
+            if (data.errorcode === '1'){
+                console.log("incorrect username or password");
+                setErrorMessage("Incorrect username or password!")
+            }
+            else{
+                handleLogin(data.user_data);
+                //useEffect(() => {handleLogin(data.user_data);},[])        
+            } 
         })
-        .catch((error) => console.error('Got this ERror:', error)); 
+        .catch((error) => {
+            console.error('Got this ERror:', error)
+            setErrorMessage("Connection error please try again")}); 
         
-        // Check if login was successful
-        if (data.errorcode === '1'){
-            console.log("login failed");
-        }
-        else{
-            handleLogin(data.user_data);            
-        } 
     };
 
 
     return (
-        <Box className="genericbox" width={"50%"} height={"50%"} >
-            <h2>Login</h2>
-            <form >
-                <div>
-                    <label>Username:</label>
-                    <input
-                        type="username"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        required
-                    />
-                </div>
-                <div>
-                    <label>Password:</label>
-                    <input
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                    />
-                </div>
-                <Alert severity="error">This is an error alert — check it out!</Alert>
-                <Button type="submit" onClick={handleSubmit} buttonmsg="Login" style="button">Login</Button>
-            </form>
-        </Box>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 'vh' }}>
+            <Box className="genericbox"  >
+                
+                <form>
+                        <h1>Login</h1>
+                        <div className="form-group">
+                        <label>Username:</label>
+                        <input
+                            type="username"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            required
+                        />
+                        </div>
+                        <div className="form-group">
+                        <label>Password:</label>
+                        <input
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                        />
+                        </div>
+                        <div type ="alert">
+                        {errorMessage? <Alert severity="error">{errorMessage}</Alert> : null}
+                        </div>
+                        <div className={"form-group"}>
+                        <button type="submit" onClick={handleSubmit} >Login</button>
+                        </div>
+                </form>
+            </Box>
+        </div>
     );
 };
 

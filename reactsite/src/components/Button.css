@@ -1,5 +1,5 @@
-.button {
-    background-color: #3380bf; /* Green */
+button {
+    background-color: #3a80b9; /* Green */
     border: none;
     color: white;
     padding: 15px 15px;
@@ -11,6 +11,18 @@
     cursor: pointer;
     border-radius: 12px;
 }
+
+@keyframes hover {
+    0% {background-color: #3a80b9;}
+    100% {background-color: #6acf26;}
+}
+
+button:hover{
+    background-color: #6acf26;
+    animation-name:hover;
+    animation-duration: .5s;
+}
+
 
 .buttonclicked {
     background-color: #6acf26; /* Green */

@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import NewUser from "./NewUser";
 import './App.css';
-import { Route, Routes, Link } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import Homepage from './Homepage.js';   
 import Login from "./Login.js";
-import Button from "./components/Button.js";  
+import Logout from "./Logout.js";
 import {useNavigate} from "react-router-dom";
 import Nav from "./components/Nav.js";
 
@@ -16,45 +16,56 @@ function App() {
   const navigate = useNavigate();
   
   let [loggedIn, setLoggedIn] = React.useState(false);
+  let [firstLogin, setFirstLogin] = React.useState(false);
   let [userInfo, setuserInfo] = React.useState({
-    username:"ooga",
+    username:"",
     userid:"",
     email:"",
   });
 
 
   function handleLogin(user_data) {
-    user_data.loggedIn = true;
+    if(!loggedIn){
     console.log(user_data);
     setuserInfo(user_data);
     setLoggedIn(true);
-    //loggedIn ? console.log( ` ${userInfo.username} logged in logged in`) : console.log("/ not logged in");
+    setFirstLogin(true);
+    }else{
+      setLoggedIn(false);
+      setuserInfo({});
+    }
+  }
 
-    navigate('/Homepage');
-   }
 
-   loggedIn ? console.log( ` ${userInfo.username} logged in`) : console.log("/ not logged in");
+  // once loggedIn 
+  useEffect(() => {
+    if(firstLogin){
+      setFirstLogin(false);
+      navigate('/Homepage')}
+   
+    },[firstLogin,navigate])
 
-  const navItems = [
-    { name: 'Login', path: '/Login' },
-    { name: 'New User', path: '/NewUser' },
-    { name: 'Homepage', path: '/Homepage' }
-  ]
+    /* useEffect(() => {
+      if(!loggedIn){
+        setFirstLogin(false);
+        navigate('/Login')}
+     
+      },[loggedIn,navigate]) */
+  
+   
 
   return (
     <div className="App">
 
-        <Nav navItems={navItems} />
+        <Nav loggedIn={loggedIn} handleLogin={handleLogin}/>
 
-        <Button className="button"/>
-
-        {userInfo.loggedIn ? <div>YOure now logged in</div> : <div>not logged in</div>}
-        
+        {loggedIn ? <div></div> : <div>not logged in</div>}
         
           <Routes>
-            <Route path="/Login" element={<Login handleLogin={handleLogin}/>}/>
-            <Route path="/NewUser" element={<NewUser handleLogin={handleLogin}/>}/>
+            <Route path="/Login" element={<Login handleLogin={handleLogin} loggedIn={loggedIn}/>}/>
+            <Route path="/NewUser" element={<NewUser handleLogin={handleLogin} loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>}/>
             <Route path="/Homepage" element={<Homepage loggedIn = {loggedIn} userInfo = {userInfo}/>}/>
+            <Route path="/Logout" element={<Logout loggedIn={loggedIn} setLoggedIn={setLoggedIn} setuserInfo={setuserInfo}/>}/>
           </Routes>
   
     </div>

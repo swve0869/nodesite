@@ -4,8 +4,6 @@ import cors from 'cors'
 import express from "express"
 import hash from 'hash-it'
 
-
-
 const corsOptions = {
   origin: 'http://localhost:3000', // Replace with the URL you want to allow
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allow specific HTTP methods
@@ -14,6 +12,8 @@ const corsOptions = {
   optionsSuccessStatus: 204 // Some legacy browsers choke on 204
 };
  
+
+//https requirements including SSL certs
 
 
 const app = express();
@@ -33,14 +33,20 @@ app.post("/newuser", async (req, res) => {
     const { username, password,email} = req.body;
     console.log(username,password);
     
-    const result =  await addUser(dynamodb_client,username,password,email); 
+    let result =  await addUser(dynamodb_client,username,password,email); 
     //if user already exists
     if(result === false){    
       console.log(username, " is not unique");
       return res.status(201).json({ message: 'Username not Unique',errorcode: '1' }); 
     }   
-    // else user succesfully added exist
-    return res.status(200).json({ message: `Succesfully added ${username}`,errorcode: '0' });
+    // else user succesfully added exists log them in
+    result = await userQuery(dynamodb_client,hash(username));
+    const user_data = {
+      username: result.Items[0].username.S ,
+      user_id: result.Items[0].user_id.N,
+      email: result.Items[0].email.S
+    }
+    return res.status(200).json({ message: `Succesfully added ${username}`,user_data,errorcode: '0' });
 
   }catch (error) {
     console.log('Error in user creation:', error);
@@ -58,9 +64,8 @@ app.post("/login", async (req, res) => {
     const {username, password} = req.body;
     console.log(`trying to login: ${username} with password: ${password}`);
     var saltedpassword = hash(password+process.env.SALT);
-    var query_user_id = hash(username+saltedpassword);
 
-    const result = await userQuery(dynamodb_client,query_user_id);
+    const result = await userQuery(dynamodb_client,hash(username));
 
     if(!result || result.Items[0].password.S != saltedpassword){
       console.log("login failed");
@@ -69,7 +74,6 @@ app.post("/login", async (req, res) => {
 
     const user_data = {
       username: result.Items[0].username.S ,
-      password: result.Items[0].password.S,
       user_id: result.Items[0].user_id.N,
       email: result.Items[0].email.S
     }
