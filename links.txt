@@ -14,9 +14,6 @@ https://stackoverflow.com/questions/11744975/enabling-https-on-express-js
 
 TODO
 
-- write a login test script
-- make nodejs server https
-- Clean up navbar
-- figure out how to center components
-- learn css styline cascading thing
+- create deployment script that installs node_modules and retrieves .env secrets
+
 - add user cookies
