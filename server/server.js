@@ -31,7 +31,7 @@ app.use(express.json());
 // create server object TESTING
 var server = https.createServer(options, app);
 server.listen(3002, () => {
-  console.log("server starting on 3002 " )
+  console.log("https server starting on 3002 " )
 });
 
 
