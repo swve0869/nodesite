@@ -27,7 +27,7 @@ const Login = ({handleLogin,loggedIn}) => {
         }
 
         //const url = `${NODE_URL}/login`
-        const url = process.env.REACT_APP_NODE_SERVER_DOMAIN + process.env.REACT_APP_NODE_SERVER_PORT +`/login`
+        const url = process.env.REACT_APP_NODE_SERVER_DOMAIN +`/login`
         console.log(url)
         var jsonData = {
         "username" : username,

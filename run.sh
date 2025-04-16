@@ -58,7 +58,15 @@ done
 
 if [ $DEPLOY == "true" ]; then
     # build for deployment
-    echo "GER"
+    echo "Bould for deployment"
+    cp env/.server.deploy.env server/.env
+    cp env/.react.deploy.env  reactsite/.env
+
+    cd server 
+    npm start &
+    cd ../reactsite
+    npm start &
+
 else
     # build for local
     echo "Building for local" 
@@ -66,6 +74,11 @@ else
     # update domains and ports in server/.env and reactsite/.env for local hosting
     cp env/.server.local.env server/.env
     cp env/.react.local.env  reactsite/.env
+
+    cd server 
+    npm start &
+    cd ../reactsite
+    npm start &
 
 
     
