@@ -17,3 +17,9 @@ TODO
 - create deployment script that installs node_modules and retrieves .env secrets
 
 - add user cookies
+
+
+mail:1234awsmanage@gmail.com
+pass:Hue091300!#!
+
+DynamoDB runs in us-west-2 region Oregon

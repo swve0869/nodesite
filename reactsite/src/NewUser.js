@@ -21,7 +21,7 @@ const NewUser = ({handleLogin,setLoggedIn}) => {
         e.preventDefault();
 
         //const url = `${NODE_URL}/newuser`
-        const url = process.env.REACT_APP_NODE_SERVER_DOMAIN + process.env.REACT_APP_NODE_SERVER_PORT +`/newuser`
+        const url = process.env.REACT_APP_NODE_SERVER_DOMAIN +`/newuser`
         const fetchData = { 
             method: 'POST', 
             headers: { 'Content-Type': 'application/json',  },

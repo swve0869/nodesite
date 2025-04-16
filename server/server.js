@@ -6,35 +6,42 @@ import fs from "fs"
 import https from "https"
 import hash from 'hash-it'
 
+console.log(process.env.REACT_URL)
+
 const corsOptions = {
-  origin: 'http://localhost:3000', // Replace with the URL you want to allow
+  origin: process.env.REACT_URL, // Replace with the URL you want to allow
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allow specific HTTP methods
   allowedHeaders: ['*'], // Specify allowed headers
   preflightContinue: false, // Pass control to the next middleware if false
   optionsSuccessStatus: 204 // Some legacy browsers choke on 204
 };
  
-
-//https requirements including SSL certs
-var key = fs.readFileSync('servercerts/selfsigned.key');
-var cert = fs.readFileSync('servercerts/selfsigned.crt');
-var options = {
-  key: key,
-  cert: cert
-};
-
-
 const app = express();
 app.use(cors(corsOptions));
 app.use(express.json());
 
-// create server object TESTING
-var server = https.createServer(options, app);
-server.listen(3002, () => {
-  console.log("https server starting on 3002 " )
-});
+// only run in https mode if we are deploying the server
+if(process.env.MODE == "deploy"){
+  //https requirements including SSL certs
+  var key = fs.readFileSync('servercerts/selfsigned.key');
+  var cert = fs.readFileSync('servercerts/selfsigned.crt');
+  var options = {
+    key: key,
+    cert: cert
+  };
 
+  // create server object TESTING
+  var server = https.createServer(options, app);
+  server.listen(3002, () => {
+    console.log("https server starting on 3002 " )
+  });
+}
 
+app.listen(process.env.PORT, () => {
+  console.log(`Server listening on ${process.env.PORT}`);
+}); 
+
+// endpoints
 app.get("/api", (req, res) => {
    console.log(req.body)
    res.json({ message: "gooby woobi" });
@@ -105,9 +112,7 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.listen(process.env.PORT, () => {
-  console.log(`Server listening on ${process.env.PORT}`);
-});
+
 
 
 
