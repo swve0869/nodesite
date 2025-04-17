@@ -6,10 +6,9 @@ import fs from "fs"
 import https from "https"
 import hash from 'hash-it'
 
-console.log(process.env.REACT_URL)
 
 const corsOptions = {
-  origin: process.env.REACT_URL, // Replace with the URL you want to allow
+  origin: process.env.REACT_APP_DOMAIN, // Replace with the URL you want to allow
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allow specific HTTP methods
   allowedHeaders: ['*'], // Specify allowed headers
   preflightContinue: false, // Pass control to the next middleware if false
@@ -23,8 +22,8 @@ app.use(express.json());
 // only run in https mode if we are deploying the server
 if(process.env.MODE == "deploy"){
   //https requirements including SSL certs
-  var key = fs.readFileSync('servercerts/selfsigned.key');
-  var cert = fs.readFileSync('servercerts/selfsigned.crt');
+  var key = fs.readFileSync(process.env.SSL_KEY_FILE);
+  var cert = fs.readFileSync(process.env.SSL_CRT_FILE);
   var options = {
     key: key,
     cert: cert
@@ -32,14 +31,15 @@ if(process.env.MODE == "deploy"){
 
   // create server object TESTING
   var server = https.createServer(options, app);
-  server.listen(3002, () => {
-    console.log("https server starting on 3002 " )
+  server.listen(process.env.NODE_SERVER_PORT, () => {
+    console.log(`https server starting on ${process.env.NODE_SERVER_PORT}` )
   });
-}
+}else{
 
-app.listen(process.env.PORT, () => {
-  console.log(`Server listening on ${process.env.PORT}`);
+app.listen(process.env.NODE_SERVER_PORT, () => {
+  console.log(`Server listening on ${process.env.NODE_SERVER_PORT}`);
 }); 
+}
 
 // endpoints
 app.get("/api", (req, res) => {

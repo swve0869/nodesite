@@ -1,9 +1,5 @@
 .env
-env
-env/.reactdeployenv
-env/.reactlocalenv
-env/.serverdeployenv
-env/.serverlocalenv
+.master.env
 
 .projcredentials
 reactsite/src/config.js

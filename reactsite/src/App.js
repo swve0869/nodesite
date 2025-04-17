@@ -9,6 +9,10 @@ import {useNavigate} from "react-router-dom";
 import Nav from "./components/Nav.js";
 
 
+console.log(process.env.REACT_APP_NODE_SERVER_DOMAIN)
+
+
+
 function App() {
 
   const navigate = useNavigate();
