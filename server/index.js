@@ -5,7 +5,12 @@ import express from "express"
 import fs from "fs"
 import https from "https"
 import hash from 'hash-it'
+import path from 'path'
+import {dirname} from 'path'
 
+
+
+const __dirname = import.meta.dirname;
 
 const corsOptions = {
   origin: process.env.REACT_APP_DOMAIN, // Replace with the URL you want to allow
@@ -15,9 +20,12 @@ const corsOptions = {
   optionsSuccessStatus: 204 // Some legacy browsers choke on 204
 };
  
+
 const app = express();
 app.use(cors(corsOptions));
 app.use(express.json());
+
+//app.use(express.static(path.join(__dirname,'../reactsite/build')));
 
 // only run in https mode if we are deploying the server
 if(process.env.MODE == "deploy"){
@@ -41,18 +49,25 @@ app.listen(process.env.NODE_SERVER_PORT, () => {
 }); 
 }
 
-// endpoints
+
+
+// Endpoints -------------------------------------------------------------------------------------------
 app.get("/api", (req, res) => {
    console.log(req.body)
    res.json({ message: "gooby woobi" });
    console.log("request received")
  });
 
- app.get("/", (req, res) => {
+app.use(express.static(path.join(__dirname,'../reactsite/build')));
+
+//$$$TODO$$$ there are issues with the endpoint below not serving the SPA react app. Currently using the express.static() function to serve.
+ //serve react SPA
+/*app.get("/", (req, res) => { 
   console.log(req.body)
-  res.json({ message: "hello from serv" });
+  //res.json({ message: "hello from serv" });
+  res.sendFile(path.join(__dirname,'..','/','reactsite','build'));
   console.log("request received")
-});
+});*/
 
 app.post("/newuser", async (req, res) => {
 
@@ -86,6 +101,8 @@ app.post("/newuser", async (req, res) => {
 });
 
 app.post("/login", async (req, res) => {
+
+  console.log("attempt")
 
   try{
     const {username, password} = req.body;

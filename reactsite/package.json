@@ -24,8 +24,9 @@
     "webpack": "^5.97.1"
   },
   "scripts": {
-    "start": "touch .env & cp ../.master.env .env &  react-scripts --openssl-legacy-provider start",
-    "build": "touch .env & cp ../.master.env .env &  react-scripts build",
+    "build": "touch .env & cp ../.reactprod.env .env &  react-scripts build",
+    "prod":  "touch .env & cp ../.reactprod.env .env &  react-scripts build",
+    "dev":   "touch .env & cp ../.reactdev.env .env &   react-scripts --openssl-legacy-provider start",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

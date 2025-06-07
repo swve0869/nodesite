@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev":  "touch .env & cp ../.nodedev.env  .env & nodemon index.js",
+    "dev":  "touch .env & cp ../.nodedev.env  .env & node index.js",
     "prod": "touch .env & cp ../.nodeprod.env .env & node index.js"
   },
   "author": "",
