@@ -1,5 +1,9 @@
 .env
 .master.env
+.nodedev.env
+.nodeprod.env
+.reactdev.env
+.reactprod.env
 
 .projcredentials
 reactsite/src/config.js
